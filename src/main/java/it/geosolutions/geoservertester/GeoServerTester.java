@@ -36,8 +36,8 @@ public class GeoServerTester {
 
 	private Input repo;
 	
-	private Output listGeocoded;
-	private Output outDiscarded;
+	private Output found;
+	private Output discarded;
 	private Configuration conf;
 
 	public GeoServerTester(Configuration conf) {
@@ -68,6 +68,7 @@ public class GeoServerTester {
 		int found=0;
 		int notfound=0;
 		int multiple=0;
+		int totin=locations.size();
 		Map connectionParameters = new HashMap();
 		connectionParameters.put(CONNECTION_PARAMETERS_CAPABILITIES_URL, conf.getProperty(GEOSERVER_URL_PARAMETER) );
 		System.out.println(locations.size());
@@ -114,8 +115,9 @@ public class GeoServerTester {
 				int number = features.size();
 				if(number==1){
 					match(l);
+					found++;
 				}else{
-					notMatch(l,number);
+					notMatch(l,features);
 					if(number>1){
 						
 						multiple ++;
@@ -130,33 +132,34 @@ public class GeoServerTester {
 			}
 			
 		}
-		report(found,notfound,multiple,errors);
+		report(found,notfound,multiple,errors,totin);
 		
 	}
 
-	private void report(int found, int notfound,int multiple, int errors) {
+	private void report(int found, int notfound,int multiple, int errors,int totin) {
 		System.out.println("\nFound:"+found);
 		System.out.println("\nNot Found:"+notfound);
 		System.out.println("\nMultiple:"+multiple);
 		System.out.println("\nErrors:"+errors);
 		int tot = notfound +found+multiple +errors;
 		System.out.println("\nTotal:"+tot);
+		int miss =totin -tot;
+		System.out.println("\nMissing:"+miss );
 		
 	}
 
 	private void notMatch(Location l) {
-		System.out.println("ERROR WHILE GETTING THE OBJECT");
+		
 		
 		
 	}
 
 	private void match(Location l) {
-		System.out.println("FOUND!");
 		
 	}
 
-	private void notMatch(Location l,int nResults) {
-		System.out.println("NOT FOUND!");
+	private void notMatch(Location l,FeatureCollection<SimpleFeatureType, SimpleFeature> features) {
+		
 		
 		
 	}
