@@ -61,6 +61,7 @@ public class GeoServerTester {
 	private static final String TYPENAME_PARAMETER  = "typename";
 	private static final String OUTPUT_FOLDER_NAME  = "folder_out";
 	private static final String CONNECTION_PARAMETERS_CAPABILITIES_URL = "WFSDataStoreFactory:GET_CAPABILITIES_URL";
+	private static final String PREFIX_NAME = "prefix";
 	private static Logger LOG = Logger.getLogger(GeoServerTester.class
 			.getCanonicalName());
 
@@ -184,12 +185,13 @@ public class GeoServerTester {
 
 	private void notMatch(Location l,FeatureCollection<SimpleFeatureType, SimpleFeature> features, String fname) {
 		String path = conf.getString(OUTPUT_FOLDER_NAME);
+		String prefix = conf.getString(PREFIX_NAME);
 		File f;BufferedWriter writer = null;
 		try {
-			f = new File (path,fname);
+			f = new File (path,prefix + fname);
 				
 			writer = new BufferedWriter(new FileWriter(f, this.getMode(f)));
-			writer.write("\n[name = " +l.getName() + " parent =  " + 
+			writer.write("\n[name = " +l.getName() + " parent = " + 
 			l.getParent().getName() + " type=" + l.getType().ordinal() +"]" );
 			writer.write("FOUND:"+ features.size());
 			
